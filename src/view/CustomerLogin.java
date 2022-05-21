@@ -4,6 +4,7 @@ import controller.interfaceListeners.IdentifierCustomerListener;
 import controller.viewsControllers.CustomerLoginController;
 import javax.swing.JOptionPane;
 import model.Customer;
+import model.db.DAO;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -212,10 +213,19 @@ public class CustomerLogin extends javax.swing.JFrame {
 
             
              */
-            //this.identifierCustomerListener.idCustomerListener(new Customer("ll", "abdalziz", "11", "11"));
+//            this.identifierCustomerListener.idCustomerListener(new Customer("ll", "abdalziz", "11", "11"));
+            Customer logedInCustomer = this.loginUser(username,pass);
+            if (logedInCustomer != null) {
+                this.identifierCustomerListener.idCustomerListener(logedInCustomer);
+            }
         } else {
             throw new Exception("Watch out !!\n" + "You can not leave behind an empty field");
         }
+    }
+
+    Customer loginUser(String userName, String password) {
+        Customer logedInCustomer = DAO.shared.loginCustomer(userName,password);
+        return  logedInCustomer;
     }
 
     @Override

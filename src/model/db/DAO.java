@@ -5,7 +5,10 @@
  */
 package model.db;
 
+import model.Customer;
+
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -15,10 +18,10 @@ import java.sql.Statement;
  */
 public class DAO {
 
-    //TODO: "DAO class" insert all queries as function here 
+    // "DAO class" insert all queries as function here
 
-    private Connection connection;
-
+    private static Connection connection;
+    public static DAO shared = new DAO();
     public DAO() {
         try {
             connection = DBConnection.getInstance().getConn();
@@ -28,19 +31,53 @@ public class DAO {
     }
     public void getTest() {
         try {
-            Statement stmt = this.connection.createStatement();
-//            stmt.executeQuery("delete from test where message = 'heeeeeeey'");
-//            stmt.executeQuery("insert into test values('welcome')");
-            ResultSet rs = stmt.executeQuery("select * from test");
-            while(rs.next()){
-                //Display values
-                System.out.println("message: " + rs.getString("message"));
-
-            }
+//            Statement stmt = this.connection.createStatement();
+//            ResultSet rs = stmt.executeQuery("insert into Customer values('1','ali','gaza','ali','123')");
+//            while(rs.next()){
+//                //Display values
+////                System.out.println("message: " + rs.getString("message"));
+//            }
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    public static Customer loginCustomer(String userName, String pass) {
+        try {
+            System.out.println("out");
+            Statement stmt = DAO.connection.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from Customer where username = '"+userName +  "' and password = '" + pass+"'");
+
+//            PreparedStatement statement = DAO.connection.prepareStatement("select * from Customer where username = ? and password = ?");
+//            statement.setString(1,userName);
+//            statement.setString(2,pass);
+//            statement.executeUpdate();
+//            ResultSet rs = statement.getResultSet();
+//            System.out.println(rs.toString());
+            while(rs.next()) {
+                //Display values
+                String userNmae = rs.getString("username");
+                System.out.println("userName: " + userNmae);
+
+                String customerId = rs.getString("customerId");
+                System.out.println("customerId: " + customerId);
+
+                String address = rs.getString("address");
+                System.out.println("address: " + address);
+
+                String customerName = rs.getString("customerName");
+                System.out.println("customerName: " + customerName);
+
+                String password = rs.getString("password");
+                System.out.println("customerName: " + customerName);
+                return new Customer(customerId,customerName,address,userName,password);
+
+            }
+        } catch (Exception exception) {
+            System.out.println(exception);
+        }
+        return null;
     }
 
 }

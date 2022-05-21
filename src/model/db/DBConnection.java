@@ -32,7 +32,7 @@ public class DBConnection {
         return instance;
     }
 
-    //TODO: "DBConnection class" insert localhost || port || username || password
+    // "DBConnection class" insert localhost || port || username || password
     private DBConnection() {
         conn = createDBConnection("192.168.1.15","1521","SYS as SYSDBA","aliwalker");
     }

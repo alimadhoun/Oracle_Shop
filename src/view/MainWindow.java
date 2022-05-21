@@ -225,6 +225,7 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO : "ManagerWindow class" Make query to register login as Customer time
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
+
         CustomarWindow customarWindow = new CustomarWindow(customer);
         customarWindow.setVisible(true);
         this.dispose();
