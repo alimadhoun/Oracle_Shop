@@ -204,7 +204,7 @@ public class CustomerLogin extends javax.swing.JFrame {
         String pass = String.copyValueOf(jPasswordField1.getPassword());
         if (!(username.equals("") || pass.equals(""))) {
 
-            /* TODO : "CustomerLogin class" make query to check customer exists or not to login his profile 
+            /* : "CustomerLogin class" make query to check customer exists or not to login his profile
               
                 make function in class DAO 
                 this method do query in database and return his id if he is exists
