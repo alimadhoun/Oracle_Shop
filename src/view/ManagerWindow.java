@@ -1,5 +1,6 @@
 package view;
 
+import model.db.DAO;
 import model.db.DBConnection;
 import controller.interfaceListeners.InsertNewCustomerActionListener;
 import controller.interfaceListeners.InsertNewDepartmentActionListener;
@@ -54,7 +55,7 @@ public class ManagerWindow extends javax.swing.JFrame {
 
         // TODO :  "ManagerWindow class" remove comment when finish from selection query
         //addInListDepartment();
-        //addInListCustomer();
+        addInListCustomer();
         managerWindowController = new ManagerWindowController();
         this.setLocationRelativeTo(null);
 
@@ -866,10 +867,10 @@ public class ManagerWindow extends javax.swing.JFrame {
     public void addInListCustomer() {
         DefaultListModel<Customer> model = new DefaultListModel();
 
-        // TODO : "ManagerWindow class" make query to get All customer in shop and make it as ArrayList<Customer> to display in JLIST
+        //  "ManagerWindow class" make query to get All customer in shop and make it as ArrayList<Customer> to display in JLIST
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
-        ArrayList<Customer> listCustomers = null;// this object of ArrayList<Customer>  contains Customer class
+        ArrayList<Customer> listCustomers = this.getAllCustomers();// this object of ArrayList<Customer>  contains Customer class
         for (Customer customer : listCustomers) {
             model.addElement(customer);
             System.out.println("" + customer);
@@ -882,6 +883,9 @@ public class ManagerWindow extends javax.swing.JFrame {
         this.jTextField8.setText("");
     }
 
+    ArrayList<Customer> getAllCustomers() {
+        return DAO.getAllCustomers();
+    }
     public void refrshComboBox(ArrayList<Department> listDepartment) {
         DefaultComboBoxModel<Department> model = new DefaultComboBoxModel<>();
 
@@ -900,10 +904,11 @@ public class ManagerWindow extends javax.swing.JFrame {
     }
 
     public void addInListProduct(String idDepartment) {
-        // TODO : "ManagerWindow class" make query to get list of product for specific Department (idDepartment) in shop and make it as Department 
+        //  : "ManagerWindow class" make query to get list of product for specific Department (idDepartment) in shop and make it as Department
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
-        Department department = null;// this object of Department contains ArrayList<Product>        
+
+        Department department = this.getDep(idDepartment);// this object of Department contains ArrayList<Product>
         DefaultListModel<Product> model = new DefaultListModel();
 
         for (Product product : department.getListProduct()) {
@@ -915,6 +920,12 @@ public class ManagerWindow extends javax.swing.JFrame {
         this.price.setText("");
         this.quantiy.setText("");
         this.descriptionProduct.setText("");
+    }
+
+    Department getDep(String idDepartment) {
+        Department dep =  DAO.getDepartment(idDepartment);
+        System.out.println(dep.getListProduct().size());
+        return  dep;
     }
 
     @Override

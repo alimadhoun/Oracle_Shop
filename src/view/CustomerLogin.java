@@ -217,6 +217,8 @@ public class CustomerLogin extends javax.swing.JFrame {
             Customer logedInCustomer = this.loginUser(username,pass);
             if (logedInCustomer != null) {
                 this.identifierCustomerListener.idCustomerListener(logedInCustomer);
+            } else {
+                throw new Exception("Error !!\n" + "invalid userName or Password");
             }
         } else {
             throw new Exception("Watch out !!\n" + "You can not leave behind an empty field");
