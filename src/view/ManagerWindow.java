@@ -41,7 +41,7 @@ public class ManagerWindow extends javax.swing.JFrame {
      */
     private AddNewDepartment newDepartment = null;
     private UpdateDepartmrnt updateDepartmrnt = null;
-    private UpdateProduct updateProduct = null;
+    private static UpdateProduct updateProduct = null;
     private AddNewProduct addNewProduct = null;
     private AddNewCustomar addNewCustomar = null;
     private UpdateCustomer updateCustomer = null;
@@ -53,8 +53,8 @@ public class ManagerWindow extends javax.swing.JFrame {
 
         initComponents();
 
-        // TODO :  "ManagerWindow class" remove comment when finish from selection query
-        //addInListDepartment();
+//         :  "ManagerWindow class" remove comment when finish from selection query
+        addInListDepartment();
         addInListCustomer();
         managerWindowController = new ManagerWindowController();
         this.setLocationRelativeTo(null);
@@ -713,6 +713,7 @@ public class ManagerWindow extends javax.swing.JFrame {
                         // here update query function
                         // call Functions from controllers "the controller define above"
                         //don't remove this
+                        managerWindowController.upProduct(product);
                         addInListProduct(product.getDepartmentID());
                     }
                 });
@@ -720,9 +721,14 @@ public class ManagerWindow extends javax.swing.JFrame {
             }
 
         }
+
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
+
+
     private void newProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newProductActionPerformed
+
         if (!(addNewProduct != null && addNewProduct.isVisible())) {
 
             DefaultComboBoxModel<Department> comboBoxModel = (DefaultComboBoxModel<Department>) jComboBox1.getModel();
@@ -730,18 +736,21 @@ public class ManagerWindow extends javax.swing.JFrame {
                 @Override
                 public boolean insertNewProductListener(Product product, String idDepartment) {
 
-                    // TODO : "ManagerWindow class" make query to add new product in DB accroding idDepartment and reload all product in JLIST
+//                     : "ManagerWindow class" make query to add new product in DB accroding idDepartment and reload all product in JLIST
                     // query must be method created in DAO class 
                     // here Insert query function if the insertation successfully return true
                     // call Functions from controllers "the controller define above"
                     //don't remove this
+
+                    Boolean status = DAO.insertNewProduct(product,idDepartment);
                     addInListProduct(idDepartment);
-                    return false;// if the insertation fail
+                    return status;// if the insertation fail
                 }
             });
             addNewProduct.setVisible(true);
         }
     }//GEN-LAST:event_newProductActionPerformed
+
 
     private void listDepartmentValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listDepartmentValueChanged
         Department department = listDepartment.getSelectedValue();
@@ -798,7 +807,6 @@ public class ManagerWindow extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea description;
     private javax.swing.JTextArea descriptionProduct;
@@ -849,10 +857,10 @@ public class ManagerWindow extends javax.swing.JFrame {
     public void addInListDepartment() {
         DefaultListModel<Department> model = new DefaultListModel();
 
-        // TODO : "ManagerWindow class" make query to get All Department in shop and make it as ArrayList<Department>
+        //  : "ManagerWindow class" make query to get All Department in shop and make it as ArrayList<Department>
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
-        ArrayList<Department> listDepartment = null;// this object of ArrayList<Department> contains Department class
+        ArrayList<Department> listDepartment = DAO.getDepartmentsWithProducts();// this object of ArrayList<Department> contains Department class
         for (Department department : listDepartment) {
             model.addElement(department);
             System.out.println("" + department);
@@ -862,6 +870,8 @@ public class ManagerWindow extends javax.swing.JFrame {
         this.description.setText("");
         this.listDepartment.setModel(model);
         this.refrshComboBox(listDepartment);
+
+
     }
 
     public void addInListCustomer() {
@@ -920,12 +930,21 @@ public class ManagerWindow extends javax.swing.JFrame {
         this.price.setText("");
         this.quantiy.setText("");
         this.descriptionProduct.setText("");
+
     }
 
     Department getDep(String idDepartment) {
-        Department dep =  DAO.getDepartment(idDepartment);
-        System.out.println(dep.getListProduct().size());
-        return  dep;
+
+        ArrayList<Department> departments = DAO.getDepartmentsWithProducts();
+        for (Department de: departments
+        ) {
+            if (de.getDepartmentID().trim().equals("1")) {
+
+                System.out.println("size = " + de.getListProduct().size());
+                return de;
+            }
+        }
+        return  null;
     }
 
     @Override

@@ -262,7 +262,7 @@ public class AddNewProduct extends javax.swing.JFrame {
                 boolean insertNewProductListener = insertNewProductActionListener.insertNewProductListener(product, idDepartment);
 
                 if (insertNewProductListener) {
-                    JOptionPane.showMessageDialog(this, "Product compelet susscefly");
+                    JOptionPane.showMessageDialog(this, "Product added successfully");
                 }
 
             } else {

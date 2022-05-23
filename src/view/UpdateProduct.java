@@ -125,8 +125,11 @@ public class UpdateProduct extends javax.swing.JFrame {
 
         jComboBox1.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
         jComboBox1.setForeground(new java.awt.Color(5, 5, 78));
-        jComboBox1.setSelectedIndex(1);
+        if (jComboBox1.getModel().getSize() != 0 ){
+            jComboBox1.setSelectedIndex(1);
+        }
         jComboBox1.setEnabled(false);
+
 
         jButton4.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
         jButton4.setForeground(new java.awt.Color(5, 5, 78));

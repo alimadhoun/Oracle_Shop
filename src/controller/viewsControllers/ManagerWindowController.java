@@ -5,6 +5,7 @@
  */
 package controller.viewsControllers;
 
+import model.Product;
 import model.db.DAO;
 
 /**
@@ -17,6 +18,10 @@ public class ManagerWindowController {
 
     public ManagerWindowController() {
         this.theDAO = new DAO();
+    }
+
+    public void upProduct(Product product) {
+        DAO.updateProduct(product);
     }
 
 }

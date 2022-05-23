@@ -1,5 +1,7 @@
 package model;
 
+import Helpers.ConstantHelper;
+
 public class Product {
 
     private String departmentID;
@@ -63,6 +65,10 @@ public class Product {
     }
 
     public String getIDProduct() {
+        if (this.IDProduct == null) {
+            this.setIDProduct(ConstantHelper.getRandromID());
+            return this.getIDProduct();
+        }
         return IDProduct;
     }
 

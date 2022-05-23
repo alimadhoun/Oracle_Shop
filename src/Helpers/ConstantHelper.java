@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -100,6 +101,18 @@ public class ConstantHelper {
                 + customerName
                 + "<html>";
 
+    }
+
+    public static String getRandromID() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 7) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
     }
 
     public static String[] setupGreeting(String customerName) {
