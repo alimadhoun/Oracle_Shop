@@ -665,19 +665,21 @@ public class ManagerWindow extends javax.swing.JFrame {
                 @Override
                 public boolean insertNewCustomerListener(Customer customer) {
 
-                    // TODO : "ManagerWindow class" make query to add new customer in DB and reload all customer in JLIST
+                    // : "ManagerWindow class" make query to add new customer in DB and reload all customer in JLIST
                     // query must be method created in DAO class 
                     // here Insert query function if the insertation successfully return true
                     // call Functions from controllers "the controller define above"
                     //don't remove this
+                    Boolean status = managerWindowController.insertNewCustomer(customer);
                     addInListCustomer();// reload customers
 
-                    return false; // if the insertation fail
+                    return status; // if the insertation fail
                 }
             });
             addNewCustomar.setVisible(true);
         }
     }//GEN-LAST:event_jButton6ActionPerformed
+
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         if (!jList3.isSelectionEmpty()) {
@@ -708,7 +710,7 @@ public class ManagerWindow extends javax.swing.JFrame {
                     @Override
                     public void updateProductListener(Product product) {
 
-                        // TODO : "ManagerWindow class" make query to update product in DB and reload all product for specific department in JLIST 
+                        //  : "ManagerWindow class" make query to update product in DB and reload all product for specific department in JLIST
                         // query must be method created in DAO class 
                         // here update query function
                         // call Functions from controllers "the controller define above"

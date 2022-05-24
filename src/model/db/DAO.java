@@ -38,19 +38,8 @@ public class DAO {
         try {
             Statement stmt = this.connection.createStatement();
 
-//            ResultSet rs = stmt.executeQuery("insert into Product values('1','item1',15.4,15,'this is a test description')");
-            ResultSet rs = stmt.executeQuery("delete from product");
-//
-//            PreparedStatement preparedStmt = connection.prepareStatement("delete from product");
-//            preparedStmt.executeQuery();
-            System.out.println("deleted");
-//            // execute the java preparedstatement
-//            preparedStmt.executeUpdate();
-
-//            while(rs.next()){
-//                //Display values
-////                System.out.println("departmentID: " + rs.getString("departmentID"));
-//            }
+//            ResultSet rs = stmt.executeQuery("delete from product");
+//            System.out.println("deleted");
 
 
         } catch (Exception ex) {
@@ -120,6 +109,39 @@ public class DAO {
         return  null;
     }
 
+    public static Boolean insertNewCustomer(Customer newCustomer) {
+
+        ArrayList<Customer> customers = DAO.getAllCustomers();
+        for (Customer cus: customers
+             ) {
+            if (cus.getCustomerId().trim().equals(newCustomer.getCustomerId().trim())) {
+                return false;
+            }
+        }
+
+        try {
+            System.out.println("in inserting new Customer");
+            Statement stmt = DAO.connection.createStatement();
+            ResultSet rs = stmt.executeQuery("insert into Customer values" +
+                    "('" +
+                    newCustomer.getCustomerId() +
+                    "','" +
+                    newCustomer.getCustomerName() +
+                    "','" +
+                    newCustomer.getAddress() +
+                    "','" +
+                    newCustomer.getUserName() +
+                    "','" +
+                    newCustomer.getPassword() +
+                    "')");
+            return true;
+        } catch (Exception exception) {
+            System.out.println("Exception in inserting new Customer");
+            System.out.println(exception);
+        }
+        return false;
+    }
+
     public static ArrayList<Department> getDepartmentsWithProducts() {
         try {
             ArrayList<Department> departments = DAO.getAllDepartments();
@@ -148,6 +170,7 @@ public class DAO {
                     System.out.println("description: " + descriptionProd);
 
                     Product prod = new Product(productName,price,quanity,descriptionProd);
+                    prod.setIDProduct(IDProduct);
                    dep.getListProduct().add(prod);
 
                 }

@@ -5,6 +5,7 @@
  */
 package controller.viewsControllers;
 
+import model.Customer;
 import model.Product;
 import model.db.DAO;
 
@@ -22,6 +23,10 @@ public class ManagerWindowController {
 
     public void upProduct(Product product) {
         DAO.updateProduct(product);
+    }
+
+    public Boolean insertNewCustomer(Customer newCustomer) {
+        return DAO.insertNewCustomer(newCustomer);
     }
 
 }
