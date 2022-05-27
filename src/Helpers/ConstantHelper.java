@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
@@ -88,11 +90,13 @@ public class ConstantHelper {
         if (sum == 10) {
             sum = 0;
         }
-        if (sum != i) {
-            return false;
-        }
-
         return true;
+//
+//        if (sum != i) {
+//            return false;
+//        }
+//
+//        return true;
     }
 
     private static String formatString(String greet, String customerName) {
@@ -101,6 +105,10 @@ public class ConstantHelper {
                 + customerName
                 + "<html>";
 
+    }
+
+    public static String getCurrentTime() {
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now());
     }
 
     public static String getRandromID() {

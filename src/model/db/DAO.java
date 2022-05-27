@@ -5,6 +5,7 @@
  */
 package model.db;
 
+import Helpers.ConstantHelper;
 import model.Customer;
 import model.Department;
 import model.Product;
@@ -36,11 +37,15 @@ public class DAO {
     }
     public void getTest() {
         try {
-            Statement stmt = this.connection.createStatement();
-
-//            ResultSet rs = stmt.executeQuery("delete from product");
-//            System.out.println("deleted");
-
+//            Statement stmt = this.connection.createStatement();
+//
+//            String sql = "select * from product";
+//
+//            ResultSet rs = stmt.executeQuery(sql);
+//
+//            System.out.println(sql);
+//
+//
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -52,8 +57,8 @@ public class DAO {
             System.out.println("out");
             Statement stmt = DAO.connection.createStatement();
 
-            ResultSet rs = stmt.executeQuery("select distinct * from Customer where username = '"+userName +  "' and password = '" + pass+"'");
-
+            ResultSet rs = stmt.executeQuery("select distinct * from Customer where customerId = '"+userName +  "' and password = '" + pass +"'");
+            System.out.println("select * from Customer where customerId = '"+userName +  "' and password = '" + pass +"'");
             while(rs.next()) {
                 //Display values
                 String userNmae = rs.getString("username");
@@ -90,6 +95,7 @@ public class DAO {
 
 
                 String departmentID = rs.getString("departmentID");
+                System.out.println("departmentID: " + departmentID);
 
                 String departmentName = rs.getString("departmentName");
                 System.out.println("departmentName: " + departmentName);
@@ -132,7 +138,7 @@ public class DAO {
                     "','" +
                     newCustomer.getUserName() +
                     "','" +
-                    newCustomer.getPassword() +
+                    "123" +
                     "')");
             return true;
         } catch (Exception exception) {
@@ -142,6 +148,28 @@ public class DAO {
         return false;
     }
 
+    public static void updateCustomerInfo(Customer customer) {
+        try {
+            System.out.println("in update Customer");
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "update Customer set customerId = " +
+                    "'" +
+                    customer.getCustomerId().trim() +
+                    "', customerName = '" +
+                    customer.getCustomerName().trim() +
+                    "',address = '" +
+                    customer.getAddress().trim() +
+                    "', userName = '" +
+                    customer.getUserName().trim() +
+                    "' where customerId = '" + customer.getCustomerId().trim() + "'";
+            System.out.println(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+        } catch (Exception exception) {
+            System.out.println("Exception in update Customer");
+            System.out.println(exception);
+        }
+    }
+
     public static ArrayList<Department> getDepartmentsWithProducts() {
         try {
             ArrayList<Department> departments = DAO.getAllDepartments();
@@ -149,8 +177,9 @@ public class DAO {
                  ) {
 
                 Statement stmt = DAO.connection.createStatement();
-                ResultSet rs = stmt.executeQuery("select distinct * from product where departmentID = '"+dep.getDepartmentID()+"'");
-
+                String sql = "select distinct * from product where departmentID = '"+dep.getDepartmentID().trim()+"'";
+                ResultSet rs = stmt.executeQuery(sql);
+                System.out.println(sql);
                 while(rs.next()) {
 
 
@@ -174,12 +203,12 @@ public class DAO {
                    dep.getListProduct().add(prod);
 
                 }
-                return departments;
-            }
-            System.out.println("out");
 
+            }
+
+            return departments;
         } catch (Exception exception) {
-            System.out.println(exception);
+            System.out.println("exception in get all departments");
         }
         return  null;
     }
@@ -238,7 +267,6 @@ public class DAO {
     public static void updateProduct(Product product) {
         try {
             System.out.println("in Update product..");
-
             Statement stmt = DAO.connection.createStatement();
             System.out.println("update product set IDProduct = '"+
                                                    product.getIDProduct() +
@@ -251,15 +279,6 @@ public class DAO {
                     product.getIDProduct()+
                     "',"+
                     "";
-
-//                stmt.executeQuery(
-//                        "update product set IDProduct = '" +
-//                                product.getIDProduct() +
-//                                "', description = '"+product.getDescription().trim()+"', price = "+
-//                                product.getPrice() + ",quanity = " + product.getQuanity() +
-//                                ",productName = '" + product.getProductName().trim() + "' "+
-//                                " where IDProduct = '" + product.getIDProduct() + "'"
-//                );
                 stmt.executeUpdate("update product set IDProduct = '" +
                         product.getIDProduct() +
                         "', description = '"+product.getDescription().trim()+"', price = "+
@@ -275,6 +294,77 @@ public class DAO {
         }
     }
 
+    public static boolean insertNewDepartment(Department newDepartment) {
+
+        ArrayList<Department> allDepartments = DAO.getAllDepartments();
+        for (Department dep: allDepartments
+             ) {
+            if (dep.getDepartmentID().equals(newDepartment.getDepartmentID())) {
+                return false;
+            }
+        }
+
+        try {
+            System.out.println("in insert new Department..");
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "insert into department values('" +
+                    newDepartment.getDepartmentID() +
+                    "','" +
+                    newDepartment.getDepartmentName()
+                    +
+                    "','"
+                    +newDepartment.getDescription()
+                    + "')";
+            System.out.println(sql);
+            stmt.executeUpdate(sql);
+            return true;
+        } catch (Exception exception) {
+            System.out.println("Exception in insert new Department..");
+            System.out.println(exception);
+
+        }
+        return false;
+    }
+
+    public static void updateDepartment(Department newDepartment) {
+        try {
+
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "update department set departmentName = '"
+                    + newDepartment.getDepartmentName().trim()
+                    + "', description = '"
+                    + newDepartment.getDescription().trim()
+                    + "' where departmentID = '"
+                    + newDepartment.getDepartmentID().trim()
+                    + "'"
+                    ;
+            stmt.executeUpdate(sql);
+            System.out.println("in Update Department..");
+        } catch (Exception exception) {
+            System.out.println(" Exception in Update Department..");
+            System.out.println(exception);
+
+        }
+    }
+
+    public static void saveUserAction(String action, String time) {
+        try {
+
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "insert into userActions values ('" +
+                    action +
+                    "','" +
+                    time +
+                    "')";
+            stmt.executeUpdate(sql);
+            System.out.println(sql);
+        } catch (Exception exception) {
+            System.out.println(" Exception in save user action..");
+            System.out.println(exception);
+
+        }
+    }
+
 }
 
 
@@ -285,7 +375,7 @@ customerId char(20),
 customerName char(20),
 address char(20),
 userName char(20),
-password char(20)
+password char(100)
 
 );
 
@@ -315,6 +405,7 @@ quanity NUMERIC(25),
 description char(100)
 );
 
+String sql = "create table userActions(action varchar(20), time varchar(100))";
 
 insert into Product values('1','1','item1',15.4,15,'this is a test description');
  */

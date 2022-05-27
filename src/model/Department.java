@@ -1,5 +1,7 @@
 package model;
 
+import Helpers.ConstantHelper;
+
 import java.util.ArrayList;
 
 public class Department {
@@ -32,6 +34,10 @@ public class Department {
     }
 
     public String getDepartmentID() {
+        if (this.departmentID == null) {
+            this.departmentID = ConstantHelper.getRandromID();
+            getDepartmentID();
+        }
         return departmentID;
     }
 

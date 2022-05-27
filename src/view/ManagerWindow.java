@@ -1,5 +1,6 @@
 package view;
 
+import Helpers.ConstantHelper;
 import model.db.DAO;
 import model.db.DBConnection;
 import controller.interfaceListeners.InsertNewCustomerActionListener;
@@ -624,12 +625,13 @@ public class ManagerWindow extends javax.swing.JFrame {
                 updateDepartmrnt = new UpdateDepartmrnt(listDepartment.getSelectedValue(), new UpdateDepartmentActionListener() {
                     @Override
                     public void updateDepartmentListener(Department Department) {
-                        // TODO : "ManagerWindow class" make query to update Department in DB and reload all department in JLIST 
+                        //  : "ManagerWindow class" make query to update Department in DB and reload all department in JLIST
                         // query must be method created in DAO class 
                         // here update query function 
 
                         // call Functions from controllers "the controller define above"
                         //don't remove this
+                        managerWindowController.updateDepartment(Department);
                         addInListDepartment();
 
                     }
@@ -645,14 +647,15 @@ public class ManagerWindow extends javax.swing.JFrame {
                 @Override
                 public boolean insertNewDepartmentListener(Department department) {
 
-                    // TODO : "ManagerWindow class" make query to add new Department in DB and reload all department in JLIST
+                    //  : "ManagerWindow class" make query to add new Department in DB and reload all department in JLIST
                     // query must be method created in DAO class 
                     // here Insert query function if the insertation successfully return true
                     // call Functions from controllers "the controller define above"
                     //don't remove this
+                    Boolean status = managerWindowController.insetNewDepartment(department);
                     addInListDepartment();
 
-                    return false; // if the insertation fail
+                    return status; // if the insertation fail
                 }
             });
             newDepartment.setVisible(true);
@@ -687,12 +690,13 @@ public class ManagerWindow extends javax.swing.JFrame {
                 updateCustomer = new UpdateCustomer(jList3.getSelectedValue(), new UpdateCustomerActionListener() {
                     @Override
                     public void updateCustomerListener(Customer customer) {
-                        // TODO : "ManagerWindow class" make query to update customer in DB and reload all customers in JLIST 
+                        //  : "ManagerWindow class" make query to update customer in DB and reload all customers in JLIST
                         // query must be method created in DAO class 
                         // here update query function 
 
                         // call Functions from controllers "the controller define above"
                         //don't remove this
+                        managerWindowController.updateCustomerInfo(customer);
                         addInListCustomer();
                     }
                 });
@@ -791,10 +795,10 @@ public class ManagerWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jList3ValueChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO : "ManagerWindow class" Make query to register logout time
+        //  : "ManagerWindow class" Make query to register logout time
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
-
+        managerWindowController.saveUserAction("logut", ConstantHelper.getCurrentTime());
         //don't remove this
         if ((newDepartment == null || newDepartment.disposed())
                 && (updateDepartmrnt == null || updateDepartmrnt.disposed())

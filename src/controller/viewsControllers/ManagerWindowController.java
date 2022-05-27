@@ -6,6 +6,7 @@
 package controller.viewsControllers;
 
 import model.Customer;
+import model.Department;
 import model.Product;
 import model.db.DAO;
 
@@ -29,4 +30,19 @@ public class ManagerWindowController {
         return DAO.insertNewCustomer(newCustomer);
     }
 
+    public void updateCustomerInfo(Customer customer) {
+        DAO.updateCustomerInfo(customer);
+    }
+
+    public Boolean insetNewDepartment(Department department) {
+       return DAO.insertNewDepartment(department);
+    }
+
+    public void updateDepartment(Department newDepartment) {
+        DAO.updateDepartment(newDepartment);
+    }
+
+    public void saveUserAction(String action, String time) {
+        DAO.saveUserAction(action,time);
+    }
 }

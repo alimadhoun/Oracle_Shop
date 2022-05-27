@@ -213,19 +213,20 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     public void loginManger() {
-        // TODO : "ManagerWindow class" Make query to register login as Manager time
+        //  : "ManagerWindow class" Make query to register login as Manager time
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
+        mainWindowController.saveUserAction("login manager",ConstantHelper.getCurrentTime());
         ManagerWindow managerWindow = new ManagerWindow();
         managerWindow.setVisible(true);
         this.dispose();
     }
 
     public void loginCustomer(Customer customer) {
-        // TODO : "ManagerWindow class" Make query to register login as Customer time
+        //  : "ManagerWindow class" Make query to register login as Customer time
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
-
+        mainWindowController.saveUserAction("login customer",ConstantHelper.getCurrentTime());
         CustomarWindow customarWindow = new CustomarWindow(customer);
         customarWindow.setVisible(true);
         this.dispose();

@@ -19,5 +19,8 @@ public class MainWindowController {
         this.theDAO = new DAO();
         this.theDAO.getTest();
     }
+    public void saveUserAction(String action, String time) {
+        DAO.saveUserAction(action,time);
+    }
 
 }

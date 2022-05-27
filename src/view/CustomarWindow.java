@@ -43,7 +43,7 @@ public class CustomarWindow extends javax.swing.JFrame {
     private Icon favIcon = null;
     private Icon UnFavIcon = null;
     private Customer customer = null;
-    private CustomerWindowController customerWindowController = null;
+    private CustomerWindowController customerWindowController =  new CustomerWindowController();
     private CartWindow cartWindow = null;
     private MyFavourite myFavourite = null;
     private boolean isDisposed = false;
@@ -53,7 +53,7 @@ public class CustomarWindow extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         reloadJTree();
         this.customer = customer;
-        customerWindowController = new CustomerWindowController();
+
         String[] setupGreeting = ConstantHelper.setupGreeting(customer.getCustomerName());
         jLabel1.setText(setupGreeting[0]);//set Date
         jLabel8.setText(setupGreeting[1]);//set Name
@@ -516,10 +516,10 @@ public class CustomarWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO : "CustomarWindow class" Make query to register logout time as Customer
+        //  : "CustomarWindow class" Make query to register logout time as Customer
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
-
+        customerWindowController.saveUserAction("user logOut", ConstantHelper.getCurrentTime());
         //don't remove this
         if ((myFavourite == null || myFavourite.disposed())
                 && (cartWindow == null || cartWindow.disposed())) {
@@ -561,23 +561,28 @@ public class CustomarWindow extends javax.swing.JFrame {
 
     public void reloadJTree() {
 
-        // TODO : "CustomarWindow class" make query to get All Department in shop and make it as ArrayList<Department>
+        //  : "CustomarWindow class" make query to get All Department in shop and make it as ArrayList<Department>
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
-        ArrayList<Department> listDepartment = null;// this object of ArrayList<Department> contains Department class
+        ArrayList<Department> listDepartment = customerWindowController.getAllDepartments();// this object of ArrayList<Department> contains Department class
 
-        // TODO : "CustomarWindow class" make query to get list of product for specific Department (idDepartment) 
+        //  : "CustomarWindow class" make query to get list of product for specific Department (idDepartment)
         //in shop and make it as Department 
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
         // this object of Department contains ArrayList<Product>  
-        ArrayList<Product> productsList = null;
+        ArrayList<Product> productsList = new ArrayList<Product>();
 
         DefaultMutableTreeNode nodeDer = new DefaultMutableTreeNode("Shop");
 
         for (Department department : listDepartment) {
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(department);
             DefaultListModel<Product> model = new DefaultListModel();
+            productsList.removeAll(productsList);
+            for (Product prod:department.getListProduct()
+                 ) {
+                productsList.add(prod);
+            }
             for (Product product : productsList) {
                 node.add(new DefaultMutableTreeNode(product));
             }

@@ -5,7 +5,10 @@
  */
 package controller.viewsControllers;
 
+import model.Department;
 import model.db.DAO;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -19,4 +22,11 @@ public class CustomerWindowController {
         this.theDAO = new DAO();
     }
 
+    public void saveUserAction(String action, String time) {
+        DAO.saveUserAction(action,time);
+    }
+
+    public ArrayList<Department> getAllDepartments() {
+        return DAO.getDepartmentsWithProducts();
+    }
 }

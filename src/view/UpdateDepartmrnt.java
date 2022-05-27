@@ -184,7 +184,7 @@ public class UpdateDepartmrnt extends javax.swing.JFrame {
                 String s1 = textNameDerpartment.getText();
                 String s2 = textDescriptionDerpartment.getText();
                 Department dep = new Department(s1, s2);
-
+                dep.setDepartmentID(this.department.getDepartmentID());
                 updateDepartmentActionListener.updateDepartmentListener(dep);
 
             } else {
