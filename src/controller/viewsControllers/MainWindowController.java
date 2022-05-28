@@ -13,14 +13,14 @@ import model.db.DAO;
  */
 public class MainWindowController {
 
-    private DAO theDAO;
+
 
     public MainWindowController() {
-        this.theDAO = new DAO();
-        this.theDAO.getTest();
+
+
     }
     public void saveUserAction(String action, String time) {
-        DAO.saveUserAction(action,time);
+        DAO.shared.saveUserAction(action,time);
     }
 
 }

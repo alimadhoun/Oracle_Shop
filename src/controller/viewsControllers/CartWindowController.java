@@ -17,29 +17,29 @@ import java.util.ArrayList;
  */
 public class CartWindowController {
   
-    private DAO theDAO;
+
 
     public CartWindowController() {
-        this.theDAO = new DAO();
+
     }
 
     public ArrayList<Product> fetchAllInCart(Customer customer) {
-        return DAO.fetchAllCartForCustomer(customer);
+        return DAO.shared.fetchAllCartForCustomer(customer);
     }
 
     public Double getTotalPriceInCart(Customer customer) {
-        return DAO.getSumOfCart(customer);
+        return DAO.shared.getSumOfCart(customer);
     }
     public void removeFromCart(String customer, Product product) {
-        DAO.removeItemFromCart(customer,product);
+        DAO.shared.removeItemFromCart(customer,product);
     }
 
     public void addNewOrder(String orderID, String customerID, String address) {
-        DAO.insertNewOrder(orderID,customerID,address);
+        DAO.shared.insertNewOrder(orderID,customerID,address);
     }
 
     public void checkOut(Customer customer) {
-        DAO.checkOut(customer);
+        DAO.shared.checkOut(customer);
     }
 //    public void clearUserCart(Customer customer) {
 //        DAO.clearUserCart(customer);

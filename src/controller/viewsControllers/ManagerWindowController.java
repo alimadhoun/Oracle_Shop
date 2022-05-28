@@ -16,33 +16,33 @@ import model.db.DAO;
  */
 public class ManagerWindowController {
 
-    private DAO theDAO;
+
 
     public ManagerWindowController() {
-        this.theDAO = new DAO();
+
     }
 
     public void upProduct(Product product) {
-        DAO.updateProduct(product);
+        DAO.shared.updateProduct(product);
     }
 
     public Boolean insertNewCustomer(Customer newCustomer) {
-        return DAO.insertNewCustomer(newCustomer);
+        return DAO.shared.insertNewCustomer(newCustomer);
     }
 
     public void updateCustomerInfo(Customer customer) {
-        DAO.updateCustomerInfo(customer);
+        DAO.shared.updateCustomerInfo(customer);
     }
 
     public Boolean insetNewDepartment(Department department) {
-       return DAO.insertNewDepartment(department);
+       return DAO.shared.insertNewDepartment(department);
     }
 
     public void updateDepartment(Department newDepartment) {
-        DAO.updateDepartment(newDepartment);
+        DAO.shared.updateDepartment(newDepartment);
     }
 
     public void saveUserAction(String action, String time) {
-        DAO.saveUserAction(action,time);
+        DAO.shared.saveUserAction(action,time);
     }
 }

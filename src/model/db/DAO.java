@@ -27,6 +27,7 @@ public class DAO {
 
     private static Connection connection;
     public static DAO shared = new DAO();
+
     public DAO() {
         try {
             connection = DBConnection.getInstance().getConn();
@@ -37,22 +38,13 @@ public class DAO {
     }
     public void getTest() {
         try {
-//            Statement stmt = this.connection.createStatement();
-//
-//            String sql = "create table orders(order_id varchar(25),CustomerID varchar(25),address varchar(250))";
-//
-//            ResultSet rs = stmt.executeQuery(sql);
-//
-//            System.out.println(sql);
-
-//
 
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    public static Customer loginCustomer(String userName, String pass) {
+    public  Customer loginCustomer(String userName, String pass) {
         try {
             System.out.println("out");
             Statement stmt = DAO.connection.createStatement();
@@ -84,7 +76,7 @@ public class DAO {
         return null;
     }
 
-    private static ArrayList<Department> getAllDepartments() {
+    private  ArrayList<Department> getAllDepartments() {
         try {
             ArrayList<Department> departments = new ArrayList<>();
             System.out.println("out");
@@ -115,9 +107,9 @@ public class DAO {
         return  null;
     }
 
-    public static Boolean insertNewCustomer(Customer newCustomer) {
+    public  Boolean insertNewCustomer(Customer newCustomer) {
 
-        ArrayList<Customer> customers = DAO.getAllCustomers();
+        ArrayList<Customer> customers = DAO.shared.getAllCustomers();
         for (Customer cus: customers
              ) {
             if (cus.getCustomerId().trim().equals(newCustomer.getCustomerId().trim())) {
@@ -148,7 +140,7 @@ public class DAO {
         return false;
     }
 
-    public static void updateCustomerInfo(Customer customer) {
+    public  void updateCustomerInfo(Customer customer) {
         try {
             System.out.println("in update Customer");
             Statement stmt = DAO.connection.createStatement();
@@ -170,9 +162,9 @@ public class DAO {
         }
     }
 
-    public static ArrayList<Department> getDepartmentsWithProducts() {
+    public  ArrayList<Department> getDepartmentsWithProducts() {
         try {
-            ArrayList<Department> departments = DAO.getAllDepartments();
+            ArrayList<Department> departments = DAO.shared.getAllDepartments();
             for (Department dep: departments
                  ) {
 
@@ -215,7 +207,7 @@ public class DAO {
 
 
 
-    public static ArrayList<Customer> getAllCustomers() {
+    public  ArrayList<Customer> getAllCustomers() {
        try {
            Statement stmt = DAO.connection.createStatement();
            ResultSet rs = stmt.executeQuery("select distinct * from Customer");
@@ -246,7 +238,7 @@ public class DAO {
        return null;
     }
 
-    public static boolean insertNewProduct(Product product, String idDepartment) {
+    public  boolean insertNewProduct(Product product, String idDepartment) {
         try {
             System.out.println("in insert new product..");
             Statement stmt = DAO.connection.createStatement();
@@ -264,7 +256,7 @@ public class DAO {
         }
     }
 
-    public static void updateProduct(Product product) {
+    public  void updateProduct(Product product) {
         try {
             System.out.println("in Update product..");
             Statement stmt = DAO.connection.createStatement();
@@ -294,9 +286,9 @@ public class DAO {
         }
     }
 
-    public static boolean insertNewDepartment(Department newDepartment) {
+    public  boolean insertNewDepartment(Department newDepartment) {
 
-        ArrayList<Department> allDepartments = DAO.getAllDepartments();
+        ArrayList<Department> allDepartments = DAO.shared.getAllDepartments();
         for (Department dep: allDepartments
              ) {
             if (dep.getDepartmentID().equals(newDepartment.getDepartmentID())) {
@@ -326,7 +318,7 @@ public class DAO {
         return false;
     }
 
-    public static void updateDepartment(Department newDepartment) {
+    public  void updateDepartment(Department newDepartment) {
         try {
 
             Statement stmt = DAO.connection.createStatement();
@@ -347,7 +339,7 @@ public class DAO {
         }
     }
 
-    public static void saveUserAction(String action, String time) {
+    public  void saveUserAction(String action, String time) {
         try {
 
             Statement stmt = DAO.connection.createStatement();
@@ -365,7 +357,7 @@ public class DAO {
         }
     }
 
-     private static ArrayList<String> getAllIDSInCartForCustomer(Customer customer) {
+     private  ArrayList<String> getAllIDSInCartForCustomer(Customer customer) {
         ArrayList<String> ids = new ArrayList<String>();
         try {
             Statement stmt = DAO.connection.createStatement();
@@ -385,7 +377,7 @@ public class DAO {
         return ids;
     }
 
-    public static ArrayList<Product> fetchAllCartForCustomer(Customer customer) {
+    public  ArrayList<Product> fetchAllCartForCustomer(Customer customer) {
         ArrayList<Product> products = new ArrayList<Product>();
         ArrayList<String> ids = getAllIDSInCartForCustomer(customer);
         for (String id: ids
@@ -428,7 +420,7 @@ public class DAO {
         return products;
     }
 
-    private static int getQuentityForProductInCart(Customer customer, String product) {
+    private  int getQuentityForProductInCart(Customer customer, String product) {
         try {
             Statement stmt = DAO.connection.createStatement();
             String sql = "select * from cart where CustomerID = '" +
@@ -449,7 +441,7 @@ public class DAO {
         return 0;
     }
 
-    public static void addToCart(Product product, Customer customer) {
+    public  void addToCart(Product product, Customer customer) {
         ArrayList<Product> allInCart = fetchAllCartForCustomer(customer);
         for (Product pro: allInCart
              ) {
@@ -480,7 +472,7 @@ public class DAO {
 
     }
 
-    public static Double getSumOfCart(Customer customer) {
+    public  Double getSumOfCart(Customer customer) {
         Double sum = 0.0;
         ArrayList<Product> allInCart = fetchAllCartForCustomer(customer);
         for (Product prod:allInCart
@@ -490,7 +482,7 @@ public class DAO {
         return sum;
     }
 
-    private static void updateItemInCart(Customer customer, Product product) {
+    private  void updateItemInCart(Customer customer, Product product) {
         try {
             Statement stmt = DAO.connection.createStatement();
             String sql = "update cart set quanity = '" +
@@ -509,7 +501,7 @@ public class DAO {
         }
     }
 
-    public static void removeItemFromCart(String customer, Product product) {
+    public  void removeItemFromCart(String customer, Product product) {
         try {
             Statement stmt = DAO.connection.createStatement();
             String sql = "delete from cart where CustomerID = '" +
@@ -526,7 +518,7 @@ public class DAO {
         }
     }
 
-    public static void addToFav(Customer customer, Product product) {
+    public  void addToFav(Customer customer, Product product) {
         try {
             Statement stmt = DAO.connection.createStatement();
             String sql = "insert into fav values('" +
@@ -543,7 +535,7 @@ public class DAO {
         }
     }
 
-    public static void removeFromFav(Customer customer, Product product) {
+    public  void removeFromFav(Customer customer, Product product) {
         try {
             Statement stmt = DAO.connection.createStatement();
             String sql = "delete from fav where CustomerID = '" +
@@ -560,7 +552,7 @@ public class DAO {
         }
     }
 
-    private static Product getProductDetails(String productID) {
+    private  Product getProductDetails(String productID) {
         try {
             Statement stmt = DAO.connection.createStatement();
             String sql = "select * from product where IDProduct = '" +
@@ -597,7 +589,7 @@ public class DAO {
         return null;
     }
 
-    public static ArrayList<Product> getAllFromFav(Customer customer) {
+    public  ArrayList<Product> getAllFromFav(Customer customer) {
         ArrayList<Product> favs = new ArrayList<>();
         try {
             Statement stmt = DAO.connection.createStatement();
@@ -621,7 +613,7 @@ public class DAO {
         return favs;
     }
 
-    public static boolean checkIfProductInFav(Customer customer,String product) {
+    public  boolean checkIfProductInFav(Customer customer,String product) {
         try {
             Statement stmt = DAO.connection.createStatement();
             String sql = "select * from fav where CustomerID = '" +
@@ -643,7 +635,7 @@ public class DAO {
         return false;
     }
 
-    public static void insertNewOrder(String order_id,String customerID, String address) {
+    public  void insertNewOrder(String order_id,String customerID, String address) {
         try {
             Statement stmt = DAO.connection.createStatement();
             String sql = "insert into orders values('" +
@@ -662,7 +654,7 @@ public class DAO {
 
         }
     }
-    public static void checkOut(Customer customer) {
+    public  void checkOut(Customer customer) {
         ArrayList<Product> cart = fetchAllCartForCustomer(customer);
         ArrayList<Department> departments = getDepartmentsWithProducts();
         ArrayList<Product> shopAllProducts = new ArrayList<>();
@@ -716,20 +708,6 @@ public class DAO {
         }
     }
 
-//    public static void clearUserCart(Customer customer) {
-//        try {
-//            Statement stmt = DAO.connection.createStatement();
-//            String sql = "delete from cart where CustomerID = '" +
-//                    customer.getCustomerId().trim() +
-//                    "'";
-//            ResultSet rs = stmt.executeQuery(sql);
-//            System.out.println(sql);
-//        } catch (Exception exception) {
-//            System.out.println(" Exception in deleting the user's cart");
-//            System.out.println(exception);
-//
-//        }
-//    }
 
 }
 

@@ -17,17 +17,17 @@ import java.util.ArrayList;
  */
 public class CartCheckoutWindowController {
   
-    private DAO theDAO;
+//    private DAO theDAO;
 
     public CartCheckoutWindowController() {
-        this.theDAO = new DAO();
+//        this.theDAO = new DAO();
     }
 
     public Double getTotalPriceInCart(Customer customer) {
-        return DAO.getSumOfCart(customer);
+        return DAO.shared.getSumOfCart(customer);
     }
 
     public ArrayList<Product> fetchAllCart(Customer customer) {
-        return DAO.fetchAllCartForCustomer(customer);
+        return DAO.shared.fetchAllCartForCustomer(customer);
     }
 }

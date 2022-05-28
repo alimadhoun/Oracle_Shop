@@ -18,37 +18,37 @@ import java.util.ArrayList;
  */
 public class CustomerWindowController {
 
-    private DAO theDAO;
+
 
     public CustomerWindowController() {
-        this.theDAO = new DAO();
+
     }
 
     public void saveUserAction(String action, String time) {
-        DAO.saveUserAction(action,time);
+        DAO.shared.saveUserAction(action,time);
     }
 
     public ArrayList<Department> getAllDepartments() {
-        return DAO.getDepartmentsWithProducts();
+        return DAO.shared.getDepartmentsWithProducts();
     }
 
     public void addToCart(Product product, Customer customer) {
-        DAO.addToCart(product,customer);
+        DAO.shared.addToCart(product,customer);
     }
 
     public void addToFav(Customer customer, Product product) {
-        DAO.addToFav(customer,product);
+        DAO.shared.addToFav(customer,product);
     }
 
     public void removeFromFav(Customer customer, Product product) {
-        DAO.removeFromFav(customer,product);
+        DAO.shared.removeFromFav(customer,product);
     }
 
     public boolean checkIfProductInFav(Customer customer, String product) {
-        return DAO.checkIfProductInFav(customer,product);
+        return DAO.shared.checkIfProductInFav(customer,product);
     }
 
     public ArrayList<Product> getAllInFav(Customer CustomerID) {
-        return DAO.getAllFromFav(CustomerID);
+        return DAO.shared.getAllFromFav(CustomerID);
     }
 }

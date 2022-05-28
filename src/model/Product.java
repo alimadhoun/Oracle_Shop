@@ -4,7 +4,7 @@ import Helpers.ConstantHelper;
 
 public class Product {
 
-    private String departmentID;
+    private String departmentID = "1";
 
     private String IDProduct;
     private String productName;

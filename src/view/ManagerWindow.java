@@ -748,7 +748,7 @@ public class ManagerWindow extends javax.swing.JFrame {
                     // call Functions from controllers "the controller define above"
                     //don't remove this
 
-                    Boolean status = DAO.insertNewProduct(product,idDepartment);
+                    Boolean status = DAO.shared.insertNewProduct(product,idDepartment);
                     addInListProduct(idDepartment);
                     return status;// if the insertation fail
                 }
@@ -866,7 +866,7 @@ public class ManagerWindow extends javax.swing.JFrame {
         //  : "ManagerWindow class" make query to get All Department in shop and make it as ArrayList<Department>
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
-        ArrayList<Department> listDepartment = DAO.getDepartmentsWithProducts();// this object of ArrayList<Department> contains Department class
+        ArrayList<Department> listDepartment = DAO.shared.getDepartmentsWithProducts();// this object of ArrayList<Department> contains Department class
         for (Department department : listDepartment) {
             model.addElement(department);
             System.out.println("" + department);
@@ -900,7 +900,7 @@ public class ManagerWindow extends javax.swing.JFrame {
     }
 
     ArrayList<Customer> getAllCustomers() {
-        return DAO.getAllCustomers();
+        return DAO.shared.getAllCustomers();
     }
     public void refrshComboBox(ArrayList<Department> listDepartment) {
         DefaultComboBoxModel<Department> model = new DefaultComboBoxModel<>();
@@ -941,7 +941,7 @@ public class ManagerWindow extends javax.swing.JFrame {
 
     Department getDep(String idDepartment) {
 
-        ArrayList<Department> departments = DAO.getDepartmentsWithProducts();
+        ArrayList<Department> departments = DAO.shared.getDepartmentsWithProducts();
         for (Department de: departments
         ) {
             if (de.getDepartmentID().trim().equals(idDepartment.trim())) {
