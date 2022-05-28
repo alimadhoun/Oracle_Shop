@@ -39,12 +39,12 @@ public class DAO {
         try {
 //            Statement stmt = this.connection.createStatement();
 //
-//            String sql = "select * from product";
+//            String sql = "create table orders(order_id varchar(25),CustomerID varchar(25),address varchar(250))";
 //
 //            ResultSet rs = stmt.executeQuery(sql);
 //
 //            System.out.println(sql);
-//
+
 //
 
         } catch (Exception ex) {
@@ -365,6 +365,372 @@ public class DAO {
         }
     }
 
+     private static ArrayList<String> getAllIDSInCartForCustomer(Customer customer) {
+        ArrayList<String> ids = new ArrayList<String>();
+        try {
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "select * from cart where CustomerID = '" + customer.getCustomerId().trim() + "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println(sql);
+            while (rs.next()) {
+                String productID = rs.getString("productID");
+                System.out.println(productID);
+                ids.add(productID);
+            }
+        } catch (Exception exception) {
+            System.out.println(" Exception in fetching cart product ids..");
+            System.out.println(exception);
+
+        }
+        return ids;
+    }
+
+    public static ArrayList<Product> fetchAllCartForCustomer(Customer customer) {
+        ArrayList<Product> products = new ArrayList<Product>();
+        ArrayList<String> ids = getAllIDSInCartForCustomer(customer);
+        for (String id: ids
+             ) {
+
+            try {
+                Statement stmt = DAO.connection.createStatement();
+                String sql = "select * from product where IDProduct = '" + id + "'";
+                ResultSet rs = stmt.executeQuery(sql);
+                System.out.println(sql);
+                while (rs.next()) {
+                    String IDProduct = rs.getString("IDProduct");
+                    System.out.println("IDProduct: " + IDProduct);
+
+                    String productName = rs.getString("productName");
+                    System.out.println("productName: " + productName);
+
+                    Double price = rs.getDouble("price");
+                    System.out.println("price: " + price);
+
+//                    int quanity = rs.getInt("quanity");
+                    int quanity = getQuentityForProductInCart(customer,IDProduct.trim());
+                    System.out.println("quanity: " + quanity);
+
+                    String descriptionProd = rs.getString("description");
+                    System.out.println("description: " + descriptionProd);
+
+                    Product prod = new Product(productName,price,quanity,descriptionProd);
+                    prod.setIDProduct(IDProduct);
+                    products.add(prod);
+                }
+            } catch (Exception exception) {
+                System.out.println(" Exception in fetching cart product ids..");
+                System.out.println(exception);
+
+            }
+
+        }
+
+        return products;
+    }
+
+    private static int getQuentityForProductInCart(Customer customer, String product) {
+        try {
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "select * from cart where CustomerID = '" +
+                    customer.getCustomerId().trim() +
+                    "' and productID = '" +
+                    product +
+                    "' ";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println(sql);
+            while (rs.next()) {
+                return rs.getInt("quanity");
+            }
+        } catch (Exception exception) {
+            System.out.println(" Exception in getQuentityForProductInCart");
+            System.out.println(exception);
+
+        }
+        return 0;
+    }
+
+    public static void addToCart(Product product, Customer customer) {
+        ArrayList<Product> allInCart = fetchAllCartForCustomer(customer);
+        for (Product pro: allInCart
+             ) {
+            if (pro.getIDProduct().trim().equals(product.getIDProduct().trim())) {
+                System.out.println("Already in cart..");
+                pro.setQuanity(product.getQuanity());
+                updateItemInCart(customer,pro);
+                return;
+            }
+        }
+
+        try {
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "insert into cart values('" +
+                    customer.getCustomerId().trim() +
+                    "','" +
+                    product.getIDProduct().trim() +
+                    "','" +
+                    product.getQuanity() +
+                    "')";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println(sql);
+        } catch (Exception exception) {
+            System.out.println(" Exception in adding new product to cart");
+            System.out.println(exception);
+
+        }
+
+    }
+
+    public static Double getSumOfCart(Customer customer) {
+        Double sum = 0.0;
+        ArrayList<Product> allInCart = fetchAllCartForCustomer(customer);
+        for (Product prod:allInCart
+             ) {
+            sum += (prod.getQuanity() * prod.getPrice());
+        }
+        return sum;
+    }
+
+    private static void updateItemInCart(Customer customer, Product product) {
+        try {
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "update cart set quanity = '" +
+                     product.getQuanity() +
+                    "' where CustomerID = '" +
+                    customer.getCustomerId().trim() +
+                    "' and productID = '" +
+                    product.getIDProduct().trim() +
+                    "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println(sql);
+        } catch (Exception exception) {
+            System.out.println(" Exception in updating product in cart");
+            System.out.println(exception);
+
+        }
+    }
+
+    public static void removeItemFromCart(String customer, Product product) {
+        try {
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "delete from cart where CustomerID = '" +
+                    customer.trim() +
+                    "' and productID = '" +
+                    product.getIDProduct().trim() +
+                    "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println(sql);
+        } catch (Exception exception) {
+            System.out.println(" Exception in deleting product in cart");
+            System.out.println(exception);
+
+        }
+    }
+
+    public static void addToFav(Customer customer, Product product) {
+        try {
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "insert into fav values('" +
+                    customer.getCustomerId().trim() +
+                    "','" +
+                    product.getIDProduct().trim() +
+                    "')";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println(sql);
+        } catch (Exception exception) {
+            System.out.println(" Exception in adding product to fav");
+            System.out.println(exception);
+
+        }
+    }
+
+    public static void removeFromFav(Customer customer, Product product) {
+        try {
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "delete from fav where CustomerID = '" +
+                    customer.getCustomerId().trim() +
+                    "' and productID = '" +
+                    product.getIDProduct().trim() +
+                    "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println(sql);
+        } catch (Exception exception) {
+            System.out.println(" Exception in adding product to fav");
+            System.out.println(exception);
+
+        }
+    }
+
+    private static Product getProductDetails(String productID) {
+        try {
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "select * from product where IDProduct = '" +
+                    productID.trim() +
+                    "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println(sql);
+            while (rs.next()) {
+                String IDProduct = rs.getString("IDProduct");
+                System.out.println("IDProduct: " + IDProduct);
+
+                String productName = rs.getString("productName");
+                System.out.println("productName: " + productName);
+
+                Double price = rs.getDouble("price");
+                System.out.println("price: " + price);
+
+                int quanity = rs.getInt("quanity");
+                System.out.println("quanity: " + quanity);
+
+                String descriptionProd = rs.getString("description");
+                System.out.println("description: " + descriptionProd);
+
+                Product prod = new Product(productName,price,quanity,descriptionProd);
+                prod.setIDProduct(IDProduct);
+                return prod;
+            }
+
+        } catch (Exception exception) {
+            System.out.println(exception);
+        }
+
+
+        return null;
+    }
+
+    public static ArrayList<Product> getAllFromFav(Customer customer) {
+        ArrayList<Product> favs = new ArrayList<>();
+        try {
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "select * from fav where CustomerID = '" +
+                    customer.getCustomerId().trim() +
+                    "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println(sql);
+            while (rs.next()) {
+
+                String productID = rs.getString("productID");
+                Product product = getProductDetails(productID);
+                favs.add(product);
+            }
+
+        } catch (Exception exception) {
+            System.out.println(" Exception in checking product in fav");
+            System.out.println(exception);
+
+        }
+        return favs;
+    }
+
+    public static boolean checkIfProductInFav(Customer customer,String product) {
+        try {
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "select * from fav where CustomerID = '" +
+                    customer.getCustomerId().trim() +
+                    "' and productID = '" +
+                    product +
+                    "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println(sql);
+            while (rs.next()) {
+                return true;
+            }
+
+        } catch (Exception exception) {
+            System.out.println(" Exception in checking product in fav");
+            System.out.println(exception);
+
+        }
+        return false;
+    }
+
+    public static void insertNewOrder(String order_id,String customerID, String address) {
+        try {
+            Statement stmt = DAO.connection.createStatement();
+            String sql = "insert into orders values('" +
+                    order_id +
+                    "','" +
+                    customerID +
+                    "','" +
+                    address +
+                    "')";
+
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.println(sql);
+        } catch (Exception exception) {
+            System.out.println(" Exception in adding product in orders");
+            System.out.println(exception);
+
+        }
+    }
+    public static void checkOut(Customer customer) {
+        ArrayList<Product> cart = fetchAllCartForCustomer(customer);
+        ArrayList<Department> departments = getDepartmentsWithProducts();
+        ArrayList<Product> shopAllProducts = new ArrayList<>();
+        for (Department dep: departments
+             ) {
+            for (Product pr:dep.getListProduct()
+                 ) {
+                shopAllProducts.add(pr);
+            }
+        }
+
+
+        for (Product pro:cart
+             ) {
+            Product originalProduct = null;
+            for (Product pr:shopAllProducts
+                 ) {
+                if (pr.getIDProduct().trim().equals(pro.getIDProduct().trim())){
+                    originalProduct = pr;
+                }
+            }
+            if (originalProduct == null) {
+                return;
+            }
+
+            try {
+                Statement stmt = DAO.connection.createStatement();
+                String sql;
+                if ((originalProduct.getQuanity() - pro.getQuanity()) > 0) {
+                    sql = "update product set quanity = " +
+                            originalProduct.getQuanity() +
+                            " - " +
+                            pro.getQuanity() +
+                            " where IDProduct = '" +
+                            originalProduct.getIDProduct().trim() +
+                            "'";
+                } else {
+                    sql = "delete from product where IDProduct = '" +
+                            pro.getIDProduct().trim() +
+                            "'";
+                }
+
+                ResultSet rs = stmt.executeQuery(sql);
+                System.out.println(sql);
+            } catch (Exception exception) {
+                System.out.println(" Exception in adding product in orders");
+                System.out.println(exception);
+
+            }
+
+        }
+    }
+
+//    public static void clearUserCart(Customer customer) {
+//        try {
+//            Statement stmt = DAO.connection.createStatement();
+//            String sql = "delete from cart where CustomerID = '" +
+//                    customer.getCustomerId().trim() +
+//                    "'";
+//            ResultSet rs = stmt.executeQuery(sql);
+//            System.out.println(sql);
+//        } catch (Exception exception) {
+//            System.out.println(" Exception in deleting the user's cart");
+//            System.out.println(exception);
+//
+//        }
+//    }
+
 }
 
 
@@ -409,3 +775,7 @@ String sql = "create table userActions(action varchar(20), time varchar(100))";
 
 insert into Product values('1','1','item1',15.4,15,'this is a test description');
  */
+
+//create table cart (CustomerID varchar(25), productID varchar(25), quanity NUMERIC(25))
+//"create table fav (CustomerID varchar(25), productID varchar(25))"
+//"create table orders(order_id varchar(25),CustomerID varchar(25),address varchar(250))"

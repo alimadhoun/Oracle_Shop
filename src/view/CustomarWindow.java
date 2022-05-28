@@ -53,11 +53,10 @@ public class CustomarWindow extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         reloadJTree();
         this.customer = customer;
-
+        myFavourite = new MyFavourite(this.customer.getCustomerId().trim());
         String[] setupGreeting = ConstantHelper.setupGreeting(customer.getCustomerName());
         jLabel1.setText(setupGreeting[0]);//set Date
         jLabel8.setText(setupGreeting[1]);//set Name
-
         favIcon = new ImageIcon(getClass().getResource("/image/mm.png"));
         UnFavIcon = new ImageIcon(getClass().getResource("/image/image.png"));
     }
@@ -437,7 +436,7 @@ public class CustomarWindow extends javax.swing.JFrame {
             DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) jTree1.getSelectionPath().getLastPathComponent();
             if (treeNode.isLeaf()) {
                 Product p = (Product) treeNode.getUserObject();
-                boolean check = checkProductInMyFavourite(p.getProductName());
+                boolean check = checkProductInMyFavourite(p.getIDProduct());
                 if (check) {
                     this.jButton1.setIcon(favIcon);
                 } else {
@@ -602,47 +601,53 @@ public class CustomarWindow extends javax.swing.JFrame {
         p.setPrice(d);
         p.setQuanity((Integer) jComboBox1.getSelectedItem());
 
-        // TODO : "CustomarWindow class" check if product esixts in customar's cart then you will update product info not inerst new Prodect
+        customerWindowController.addToCart(p,this.customer);
+
+        //  : "CustomarWindow class" check if product esixts in customar's cart then you will update product info not inerst new Prodect
         // call Functions from controllers "the controller define above"
 
         /* if () {
-            // TODO : "CustomarWindow class" insert Prodcut to customar's cart using (id) customer object
+            //  : "CustomarWindow class" insert Prodcut to customar's cart using (id) customer object
             // query must be method created in DAO class
         } else {
-            // TODO : "CustomarWindow class" update Prodcut to customar's cart using (id) customer object
+            //  : "CustomarWindow class" update Prodcut to customar's cart using (id) customer object
             // query must be method created in DAO class
         }*/
     }
 
     public void addInMyFavourite(Product product) throws CloneNotSupportedException {
         Product p = product;
-        // TODO : "CustomarWindow class" insert Prodcut to customar's MyFavourite list using (id) customer object
+        //  : "CustomarWindow class" insert Prodcut to customar's MyFavourite list using (id) customer object
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
-
+        customerWindowController.addToFav(this.customer, product);
         this.jButton1.setIcon(favIcon);
     }
 
     public void removeFromFavourite(Product product) throws CloneNotSupportedException {
         Product p = product;
-        // TODO : "CustomarWindow class" Delete Prodcut from customar's MyFavourite list using (id) customer object
+        //  : " class" Delete Prodcut from customar's MyFavourite list using (id) customer object
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
-
+        customerWindowController.removeFromFav(this.customer,product);
         this.jButton1.setIcon(UnFavIcon);
     }
 
     public boolean checkProductInMyFavourite(String productID) {
 
-        /* TODO : "CustomarWindow class" make query to check productID in Customar's Favourite List of product or not           
+        /*  : "CustomarWindow class" make query to check productID in Customar's Favourite List of product or not
                 make function in class DAO 
                 this method do query in database and return ArrayList<Product>    
                                 // call Functions from controllers "the controller define above"
 
          */
-        boolean exists = true; // return value from query
-
-        return exists ? true : false;
+        boolean exists = customerWindowController.checkIfProductInFav(this.customer,productID.trim()); // return value from query
+        if (exists) {
+            this.jButton1.setIcon(favIcon);
+        } else {
+            this.jButton1.setIcon(UnFavIcon);
+        }
+        return exists;
 
     }
 

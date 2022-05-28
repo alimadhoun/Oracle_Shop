@@ -8,6 +8,8 @@ import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+
+import model.Customer;
 import model.Product;
 
 /*
@@ -330,11 +332,12 @@ public class CartCheckoutWindow extends javax.swing.JFrame {
         jPanel2.validate();
         jPanel2.repaint();
 
-        // TODO : "CartCheckoutWindow class" make query to get cart of customar using Customer id
+        //  : "CartCheckoutWindow class" make query to get cart of customar using Customer id
         // query must be method created in DAO class
         // this object of Department contains ArrayList<Product>  
         // call Functions from controllers "the controller define above"
-        ArrayList<Product> arrayList = null;
+        Customer tempCustomer = new Customer(this.customarID,"","","");
+        ArrayList<Product> arrayList = cartCheckoutWindowController.fetchAllCart(tempCustomer);
 
         int counter = 0;
         for (Product product : arrayList) {
@@ -347,9 +350,10 @@ public class CartCheckoutWindow extends javax.swing.JFrame {
             counter++;
         }
 
-        // TODO : "CartCheckoutWindow class" make query to get Sum prices of product cart customar using Customer id
+        //  : "CartCheckoutWindow class" make query to get Sum prices of product cart customar using Customer id
         // query must be method created in DAO class
-        double sum = 0; // 
+        Customer tempCustomerr = new Customer(this.customarID,"","","");
+        double sum = cartCheckoutWindowController.getTotalPriceInCart(tempCustomer); //
         jLabel15.setText("" + sum + " $");
 
         jLabel17.setText("" + counter);

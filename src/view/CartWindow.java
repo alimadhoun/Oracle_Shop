@@ -1,5 +1,6 @@
 package view;
 
+import Helpers.ConstantHelper;
 import controller.interfaceListeners.ConfirmOrderActionListener;
 import controller.interfaceListeners.RemoveProductActionListener;
 import controller.viewsControllers.CartWindowController;
@@ -10,6 +11,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
+
+import model.Customer;
 import model.Product;
 
 /*
@@ -178,10 +181,13 @@ public class CartWindow extends javax.swing.JFrame {
                 @Override
                 public void ConfirmOrderListener(String address) {
 
-                    // TODO : "CartWindow class" generate order id (order_id,customarID,,address) and insert orders_done
-                    // TODO : "CartWindow class" insert for each product with order_id into table orders
-                    // TODO : "CartWindow class" update products info in shop 
-                    // TODO : "CartWindow class" clear customer's cart
+                    //  : "CartWindow class" generate order id (order_id,customarID,,address) and insert orders_done
+                    cartWindowController.addNewOrder(ConstantHelper.getRandromID(),customarID,address);
+                    Customer temp = new Customer(customarID,"","","");
+                    //  : "CartWindow class" update products info in shop
+                    cartWindowController.checkOut(temp);
+                    // : "CartWindow class" clear customer's cart
+//                    cartWindowController.clearUserCart(temp);
                     // call Functions from controllers "the controller define above"
                     JOptionPane.showMessageDialog(CartWindow.this, "Your order id submit sucessfully \n Thank you !!");
 
@@ -215,21 +221,22 @@ public class CartWindow extends javax.swing.JFrame {
         jPanel1.validate();
         jPanel1.repaint();
 
-        // TODO : "CartWindow class" make query to get cart of customar using Customer id
+        //  : "CartWindow class" make query to get cart of customar using Customer id
         // query must be method created in DAO class
         // call Functions from controllers "the controller define above"
-        // this object of Department contains ArrayList<Product>  
-        ArrayList<Product> arrayList = null;
+        // this object of Department contains ArrayList<Product>
+        Customer tempCustomer = new Customer(this.customarID,"", "", "", "");
+        ArrayList<Product> arrayList = cartWindowController.fetchAllInCart(tempCustomer);
 
         int counter = 0;
         for (Product product : arrayList) {
             panelCart = new PanelCart(product, new RemoveProductActionListener() {
                 @Override
                 public void removeProductListener(Product product) {
-                    // TODO : "CartWindow class" make query to remove product from customar's cart
+                    //  : "CartWindow class" make query to remove product from customar's cart
                     // query must be method created in DAO class
                     // call Functions from controllers "the controller define above"
-
+                    cartWindowController.removeFromCart(customarID,product);
                     getCart();// reload cart
                 }
             });
@@ -244,9 +251,10 @@ public class CartWindow extends javax.swing.JFrame {
             counter++;
         }
 
-        // TODO : "CartWindow class" make query to get Sum prices of product cart customar using Customer id
+        //  : "CartWindow class" make query to get Sum prices of product cart customar using Customer id
         // query must be method created in DAO class
-        double sum = 0; // 
+        Customer tempCus = new Customer(this.customarID,"", "", "", "");
+        double sum = cartWindowController.getTotalPriceInCart(tempCus); //
         jLabel19.setText("" + sum + " $");
     }
 

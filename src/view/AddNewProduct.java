@@ -254,10 +254,10 @@ public class AddNewProduct extends javax.swing.JFrame {
                 double dprice = Double.parseDouble(price.getText());
                 int iQ = Integer.parseInt(quantiy.getText());
 
-                //TODO : "AddNewProduct class" generate ID for Product example 'eb-101' e-book accroding department
+                // : "AddNewProduct class" generate ID for Product example 'eb-101' e-book accroding department
                 // insert function in constantHelper to generate ID for product
                 Product product = new Product(nameProduct.getText(), dprice, iQ, description.getText());
-                //product.setIDProduct("eb-101");
+                product.setIDProduct(ConstantHelper.getRandromID());
                 String idDepartment = ((Department) combo.getSelectedItem()).getDepartmentID();
                 boolean insertNewProductListener = insertNewProductActionListener.insertNewProductListener(product, idDepartment);
 

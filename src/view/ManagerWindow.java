@@ -944,7 +944,7 @@ public class ManagerWindow extends javax.swing.JFrame {
         ArrayList<Department> departments = DAO.getDepartmentsWithProducts();
         for (Department de: departments
         ) {
-            if (de.getDepartmentID().trim().equals("1")) {
+            if (de.getDepartmentID().trim().equals(idDepartment.trim())) {
 
                 System.out.println("size = " + de.getListProduct().size());
                 return de;

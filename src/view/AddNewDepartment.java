@@ -1,5 +1,6 @@
 package view;
 
+import Helpers.ConstantHelper;
 import controller.interfaceListeners.InsertNewDepartmentActionListener;
 import java.awt.HeadlessException;
 import java.util.logging.Level;
@@ -186,10 +187,11 @@ public class AddNewDepartment extends javax.swing.JFrame {
             if (!(textNameDerpartment.getText().equals("") || textDescriptionDerpartment.getText().equals(""))) {
                 String s1 = textNameDerpartment.getText();
                 String s2 = textDescriptionDerpartment.getText();
-                //TODO : "AddNewDepartment class" genrate ID FOR Department and add into DB
+                // : "AddNewDepartment class" genrate ID FOR Department and add into DB
 
                 Department d = new Department(s1, s2);
-                //d.setDepartmentID("");
+                d.setDepartmentID(ConstantHelper.getRandromID());
+
                 boolean succ = insertNewDepartmentActionListener.insertNewDepartmentListener(d);
                 if (succ) {
                     JOptionPane.showMessageDialog(this, "Added Department successfully ");

@@ -5,7 +5,11 @@
  */
 package controller.viewsControllers;
 
+import model.Customer;
+import model.Product;
 import model.db.DAO;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -17,5 +21,13 @@ public class CartCheckoutWindowController {
 
     public CartCheckoutWindowController() {
         this.theDAO = new DAO();
-    } 
+    }
+
+    public Double getTotalPriceInCart(Customer customer) {
+        return DAO.getSumOfCart(customer);
+    }
+
+    public ArrayList<Product> fetchAllCart(Customer customer) {
+        return DAO.fetchAllCartForCustomer(customer);
+    }
 }

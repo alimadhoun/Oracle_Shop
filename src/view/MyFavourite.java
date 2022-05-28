@@ -3,6 +3,8 @@ package view;
 import controller.viewsControllers.CustomerWindowController;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+
+import model.Customer;
 import model.Product;
 
 /*
@@ -135,13 +137,14 @@ public class MyFavourite extends javax.swing.JFrame {
     public void reshList(String customerId) {
         DefaultListModel<Product> model = new DefaultListModel();
 
-        /* TODO : "MyFavourite class" make query to get Customar's Favourite List of product 
+        /*  : "MyFavourite class" make query to get Customar's Favourite List of product
               
                 make function in class DAO 
                 this method do query in database and return ArrayList<Product>   
         // call Functions from controllers "the controller define above"
          */
-        ArrayList<Product> listOfProduct = null; // using customerId 
+        Customer temp = new Customer(customerId,"","","");
+        ArrayList<Product> listOfProduct = customerWindowController.getAllInFav(temp); // using customerId
 
         for (Product p : listOfProduct) {
             model.addElement(p);
